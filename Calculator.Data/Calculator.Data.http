@@ -1,6 +1,0 @@
-@Calculator.Data_HostAddress = http://localhost:5023
-
-GET {{Calculator.Data_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

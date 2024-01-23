@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiplicationService", "Mu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivisionService", "DivisionService\DivisionService.csproj", "{9583444F-10F7-4278-9BDE-B493A7F6A62D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Data", "Calculator.Data\Calculator.Data.csproj", "{A74F4693-9E5C-4980-A3D0-C1E5DA7E791A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +36,5 @@ Global
 		{9583444F-10F7-4278-9BDE-B493A7F6A62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9583444F-10F7-4278-9BDE-B493A7F6A62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9583444F-10F7-4278-9BDE-B493A7F6A62D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A74F4693-9E5C-4980-A3D0-C1E5DA7E791A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A74F4693-9E5C-4980-A3D0-C1E5DA7E791A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A74F4693-9E5C-4980-A3D0-C1E5DA7E791A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A74F4693-9E5C-4980-A3D0-C1E5DA7E791A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
