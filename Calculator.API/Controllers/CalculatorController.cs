@@ -1,4 +1,5 @@
 ﻿using Calculator.API.Models;
+using Calculator.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace Calculator.API.Controllers;
 
 [ApiController]
 [Route("api/calculator")]
-public class CalculatorController : ControllerBase
+public class CalculatorController(ICalculatorService calculatorService) : ControllerBase
 {
     [HttpPost("calculate")]
     public IActionResult CalculateExpression(UserInput userInput, IValidator<UserInput> validator)
@@ -17,6 +18,8 @@ public class CalculatorController : ControllerBase
             return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
         }
 
-        return Ok(userInput.Expression);
+        var result = calculatorService.CalculateExpression(userInput.Expression);
+
+        return Ok(result);
     }
 }

@@ -1,3 +1,5 @@
+using Calculator.API.Repositories;
+using Calculator.API.Services;
 using Calculator.API.Validators;
 using FluentValidation;
 
@@ -9,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<UserInputValidator>();
+
+builder.Services.AddScoped<ICalculatorService, CalculatorService>();
+builder.Services.AddScoped<IExpressionRepository, ExpressionRepository>();
 
 var app = builder.Build();
 
