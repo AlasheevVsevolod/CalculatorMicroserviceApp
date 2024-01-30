@@ -1,7 +1,11 @@
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Calculator.API.Enums;
 using Calculator.API.Extensions;
 using Calculator.API.Repositories;
+using Calculator.Common.Commands;
+using RabbitMQ.Client;
 
 namespace Calculator.API.Services;
 
@@ -125,6 +129,8 @@ public class CalculatorService(IExpressionRepository expressionRepository) : ICa
             switch ((Operations)operand)
             {
                 case Operations.Add:
+                    var command = new AdditionCommand(op1, op2);
+                    SendMessage(command);
                     resultStack.Push(op1 + op2);
                     break;
                 case Operations.Subtract:
@@ -142,5 +148,17 @@ public class CalculatorService(IExpressionRepository expressionRepository) : ICa
         }
 
         return resultStack.Pop();
+    }
+
+    private void SendMessage(AdditionCommand command)
+    {
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(command));
+
+        var factory = new ConnectionFactory { HostName = "localhost" };
+        using (var connection = factory.CreateConnection())
+        using (var channel = connection.CreateModel())
+        {
+            channel.BasicPublish("test.exchange", "", null, body);
+        }
     }
 }
