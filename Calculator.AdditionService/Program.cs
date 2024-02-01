@@ -1,27 +1,22 @@
-using Calculator.API.Controllers;
-using Calculator.API.Repositories;
-using Calculator.API.Services;
-using Calculator.API.Validators;
+using Calculator.AdditionService.Consumers;
+using Calculator.AdditionService.Repositories;
+using Calculator.AdditionService.Services;
 using Calculator.Common.Configurations;
 using Calculator.Common.Extensions;
-using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddValidatorsFromAssemblyContaining<UserInputValidator>();
 
 builder.Services.RegisterMongo(builder.Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>());
 builder.Services.RegisterRabbit(
     builder.Configuration.GetSection(nameof(RabbitSettings)).Get<RabbitSettings>(),
-    typeof(CalculatorController).Assembly);
+    typeof(AdditionCommandConsumer).Assembly);
 
-builder.Services.AddScoped<ICalculatorService, CalculatorService>();
-builder.Services.AddScoped<IExpressionRepository, ExpressionRepository>();
+builder.Services.AddScoped<IAdditionExpressionService, AdditionExpressionService>();
+builder.Services.AddScoped<IAdditionExpressionRepository, AdditionExpressionRepository>();
 
 var app = builder.Build();
 
@@ -34,6 +29,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
 
 app.Run();
