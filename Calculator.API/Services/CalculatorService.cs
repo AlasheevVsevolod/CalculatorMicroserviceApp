@@ -5,11 +5,13 @@ using Calculator.API.Enums;
 using Calculator.API.Extensions;
 using Calculator.API.Repositories;
 using Calculator.Common.Commands;
+using Calculator.Common.Constants;
+using MassTransit;
 using RabbitMQ.Client;
 
 namespace Calculator.API.Services;
 
-public class CalculatorService(IExpressionRepository expressionRepository) : ICalculatorService
+public class CalculatorService(IBus bus, IExpressionRepository expressionRepository) : ICalculatorService
 {
     public double CalculateExpression(string expression)
     {
@@ -150,15 +152,9 @@ public class CalculatorService(IExpressionRepository expressionRepository) : ICa
         return resultStack.Pop();
     }
 
-    private void SendMessage(AdditionCommand command)
+    private async void SendMessage(AdditionCommand command)
     {
-        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(command));
-
-        var factory = new ConnectionFactory { HostName = "localhost" };
-        using (var connection = factory.CreateConnection())
-        using (var channel = connection.CreateModel())
-        {
-            channel.BasicPublish("test.exchange", "", null, body);
-        }
+        var endpoint = await bus.GetSendEndpoint(GlobalEndpointAddress.CalculatorAdditionCommandQueue);
+        await endpoint.Send(command);
     }
 }

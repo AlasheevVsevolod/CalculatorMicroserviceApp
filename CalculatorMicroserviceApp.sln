@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.API", "Calculator.API\Calculator.API.csproj", "{C84A6B3B-A9F2-4E7D-96AD-7822703C6BCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdditionService", "AdditionService\AdditionService.csproj", "{582700DC-42CA-4E2B-B4DC-2F98E04FD7F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.AdditionService", "Calculator.AdditionService\Calculator.AdditionService.csproj", "{582700DC-42CA-4E2B-B4DC-2F98E04FD7F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubtractionService", "SubtractionService\SubtractionService.csproj", "{0514FF19-E384-484F-8747-FBA576410E32}"
 EndProject
