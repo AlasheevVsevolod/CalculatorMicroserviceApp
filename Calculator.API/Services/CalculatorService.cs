@@ -1,13 +1,10 @@
-using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using Calculator.API.Enums;
 using Calculator.API.Extensions;
 using Calculator.API.Repositories;
-using Calculator.Common.Commands;
 using Calculator.Common.Constants;
+using Calculator.Common.RabbitMessages;
 using MassTransit;
-using RabbitMQ.Client;
 
 namespace Calculator.API.Services;
 
@@ -131,7 +128,7 @@ public class CalculatorService(IBus bus, IExpressionRepository expressionReposit
             switch ((Operations)operand)
             {
                 case Operations.Add:
-                    var command = new AdditionCommand(op1, op2);
+                    var command = new AdditionMessage(op1, op2);
                     SendMessage(command);
                     resultStack.Push(op1 + op2);
                     break;
@@ -152,9 +149,9 @@ public class CalculatorService(IBus bus, IExpressionRepository expressionReposit
         return resultStack.Pop();
     }
 
-    private async void SendMessage(AdditionCommand command)
+    private async void SendMessage(AdditionMessage message)
     {
         var endpoint = await bus.GetSendEndpoint(GlobalEndpointAddress.CalculatorAdditionCommandQueue);
-        await endpoint.Send(command);
+        await endpoint.Send(message);
     }
 }
