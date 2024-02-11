@@ -15,8 +15,14 @@ public class AdditionExpressionRepository : IAdditionExpressionRepository
         _collection = database.GetCollection<AdditionExpressionModel>(mongoSettings.Value.CollectionName);
 
     }
-    public async Task CreateAsync(AdditionExpressionModel model)
+    public async Task<Guid> CreateAsync(AdditionExpressionModel model)
     {
         await _collection.InsertOneAsync(model);
+        return Guid.Parse(model.Id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _collection.DeleteOneAsync(x => x.Id == id.ToString());
     }
 }

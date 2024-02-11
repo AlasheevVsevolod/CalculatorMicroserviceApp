@@ -10,7 +10,7 @@ namespace Calculator.API.Controllers;
 public class CalculatorController(ICalculatorService calculatorService) : ControllerBase
 {
     [HttpPost("calculate")]
-    public IActionResult CalculateExpression(UserInput userInput, IValidator<UserInput> validator)
+    public async Task<IActionResult> CalculateExpression(UserInput userInput, IValidator<UserInput> validator)
     {
         var validationResult = validator.Validate(userInput);
         if (!validationResult.IsValid)
@@ -18,7 +18,7 @@ public class CalculatorController(ICalculatorService calculatorService) : Contro
             return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
         }
 
-        var result = calculatorService.CalculateExpression(userInput.Expression);
+        var result = await calculatorService.CalculateExpression(userInput.Expression);
 
         return Ok(result);
     }

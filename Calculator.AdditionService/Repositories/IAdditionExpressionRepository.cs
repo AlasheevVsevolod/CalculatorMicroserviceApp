@@ -4,5 +4,6 @@ namespace Calculator.AdditionService.Repositories;
 
 public interface IAdditionExpressionRepository
 {
-    Task CreateAsync(AdditionExpressionModel model);
+    Task<Guid> CreateAsync(AdditionExpressionModel model);
+    Task DeleteAsync(Guid id);
 }

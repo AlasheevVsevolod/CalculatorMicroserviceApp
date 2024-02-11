@@ -14,7 +14,9 @@ public static class ServiceCollectionExtensions
 
         services.AddMassTransit(x =>
         {
+            x.SetKebabCaseEndpointNameFormatter();
             x.AddConsumers(assemblies);
+            x.AddActivities(assemblies);
             x.UsingRabbitMq((context, configurator) =>
             {
                 configurator.Host(rabbitSettings.Host, h =>
