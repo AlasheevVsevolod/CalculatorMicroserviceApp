@@ -1,16 +1,15 @@
 using System.Text.RegularExpressions;
+using Calculator.AdditionService.Activities;
 using Calculator.API.Enums;
 using Calculator.API.Extensions;
 using Calculator.API.Repositories;
-using Calculator.Common.Constants;
-using Calculator.Common.RabbitMessages;
 using MassTransit;
 
 namespace Calculator.API.Services;
 
-public class CalculatorService(IBus bus, IExpressionRepository expressionRepository) : ICalculatorService
+public class CalculatorService(IBus bus, IEndpointNameFormatter endpointNameFormatter, IExpressionRepository expressionRepository) : ICalculatorService
 {
-    public double CalculateExpression(string expression)
+    public async Task<double> CalculateExpression(string expression)
     {
         var expressionParts = ParseExpression(expression);
 
@@ -19,7 +18,7 @@ public class CalculatorService(IBus bus, IExpressionRepository expressionReposit
 
         var polishNotation = ConvertToPolishNotation(parsedParts);
 
-        var result = CalculateInPolishNotation(polishNotation);
+        var result = await CalculateInPolishNotation(polishNotation);
 
         return result;
     }
@@ -112,8 +111,11 @@ public class CalculatorService(IBus bus, IExpressionRepository expressionReposit
         }
     }
 
-    private double CalculateInPolishNotation(List<object> polishNotation)
+    private async Task<double> CalculateInPolishNotation(List<object> polishNotation)
     {
+        var builder = new RoutingSlipBuilder(Guid.NewGuid());
+        builder.AddVariable("Result", polishNotation.First(x => x is double));
+
         var resultStack = new Stack<double>();
         foreach (var operand in polishNotation)
         {
@@ -123,35 +125,32 @@ public class CalculatorService(IBus bus, IExpressionRepository expressionReposit
                 continue;
             }
 
-            resultStack.TryPop(out var op2);
             resultStack.TryPop(out var op1);
             switch ((Operations)operand)
             {
                 case Operations.Add:
-                    var command = new AdditionMessage(op1, op2);
-                    SendMessage(command);
-                    resultStack.Push(op1 + op2);
+                    builder.AddActivity(
+                        "AdditionActivity",
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<AdditionActivity, AdditionArguments>()}"),
+                        new { Operand1 = op1 });
                     break;
                 case Operations.Subtract:
-                    resultStack.Push(op1 - op2);
+                    // resultStack.Push(op1 - op2);
                     break;
                 case Operations.Multiply:
-                    resultStack.Push(op1 * op2);
+                    // resultStack.Push(op1 * op2);
                     break;
                 case Operations.Divide:
-                    resultStack.Push(op1 / op2);
+                    // resultStack.Push(op1 / op2);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        return resultStack.Pop();
-    }
+        var routingSlip = builder.Build();
+        await bus.Execute(routingSlip);
 
-    private async void SendMessage(AdditionMessage message)
-    {
-        var endpoint = await bus.GetSendEndpoint(GlobalEndpointAddress.CalculatorAdditionCommandQueue);
-        await endpoint.Send(message);
+        return (double)(routingSlip.Variables["Result"]);
     }
 }

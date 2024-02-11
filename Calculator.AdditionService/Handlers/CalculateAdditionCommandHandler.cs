@@ -3,7 +3,7 @@ using Calculator.AdditionService.Repositories;
 using Calculator.Common.Abstractions;
 using Calculator.Common.Messaging;
 
-namespace Calculator.AdditionService.Services;
+namespace Calculator.AdditionService.Handlers;
 
 public class CalculateAdditionCommandHandler(IAdditionExpressionRepository additionExpressionRepository)
     : ICommandHandler<CalculateAdditionCommand>
@@ -19,8 +19,8 @@ public class CalculateAdditionCommandHandler(IAdditionExpressionRepository addit
                 Result = operationResult
             };
 
-            await additionExpressionRepository.CreateAsync(newExpression);
-            return new Result { Value = operationResult };
+            var createdId = await additionExpressionRepository.CreateAsync(newExpression);
+            return new Result { Value = operationResult, CreatedId = createdId};
         }
         catch (Exception e)
         {

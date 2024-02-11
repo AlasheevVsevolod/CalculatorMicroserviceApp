@@ -15,7 +15,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Calculator.AdditionService\Calculator.AdditionService.csproj" />
       <ProjectReference Include="..\Calculator.Common\Calculator.Common.csproj" />
+      <ProjectReference Include="..\DivisionService\DivisionService.csproj" />
+      <ProjectReference Include="..\MultiplicationService\MultiplicationService.csproj" />
+      <ProjectReference Include="..\SubtractionService\SubtractionService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Extensions\BusExtensions.cs" />
     </ItemGroup>
 
 </Project>
