@@ -1,13 +1,15 @@
-using Calculator.AdditionService.Services;
-using Calculator.Common.Commands;
+using Calculator.AdditionService.Models;
+using Calculator.Common.RabbitMessages;
 using MassTransit;
+using MediatR;
 
 namespace Calculator.AdditionService.Consumers;
 
-public class AdditionCommandConsumer(IAdditionExpressionService service) : IConsumer<AdditionCommand>
+public class AdditionCommandConsumer(ISender mediator) : IConsumer<AdditionMessage>
 {
-    public async Task Consume(ConsumeContext<AdditionCommand> context)
+    public async Task Consume(ConsumeContext<AdditionMessage> context)
     {
-        var result = await service.CalculateExpression(context.Message);
+        var message = context.Message;
+        var result = await mediator.Send(new CalculateAdditionCommand(message.Operand1, message.Operand2));
     }
 }
