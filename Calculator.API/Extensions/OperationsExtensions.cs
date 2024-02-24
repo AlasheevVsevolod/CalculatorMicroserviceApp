@@ -21,7 +21,7 @@ public static class OperationsExtensions
         return enumValues.Contains(value);
     }
 
-    private static string GetValue(Operations operation)
+    public static string GetValue(this Operations operation)
     {
         return ((char)operation).ToString();
     }

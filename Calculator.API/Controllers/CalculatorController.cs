@@ -1,13 +1,14 @@
-﻿using Calculator.API.Models;
-using Calculator.API.Services;
+﻿using Calculator.API.Events;
+using Calculator.API.Models;
 using FluentValidation;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Calculator.API.Controllers;
 
 [ApiController]
 [Route("api/calculator")]
-public class CalculatorController(ICalculatorService calculatorService) : ControllerBase
+public class CalculatorController(IBus bus) : ControllerBase
 {
     [HttpPost("calculate")]
     public async Task<IActionResult> CalculateExpression(UserInput userInput, IValidator<UserInput> validator)
@@ -18,8 +19,13 @@ public class CalculatorController(ICalculatorService calculatorService) : Contro
             return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
         }
 
-        var result = await calculatorService.CalculateExpression(userInput.Expression);
+        var message = new ExpressionReceived
+        {
+            Expression = userInput.Expression,
+            OperationId = userInput.OperationId
+        };
+        await bus.Publish(message);
 
-        return Ok(result);
+        return Ok(userInput.OperationId);
     }
 }

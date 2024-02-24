@@ -11,8 +11,8 @@ public class AdditionExpressionRepository : IAdditionExpressionRepository
 
     public AdditionExpressionRepository(IMongoClient mongoClient, IOptions<MongoSettings> mongoSettings)
     {
-        var database = mongoClient.GetDatabase(mongoSettings.Value.DatabaseName);
-        _collection = database.GetCollection<AdditionExpressionModel>(mongoSettings.Value.CollectionName);
+        var database = mongoClient.GetDatabase(mongoSettings.Value.ExpressionDatabaseName);
+        _collection = database.GetCollection<AdditionExpressionModel>(mongoSettings.Value.ExpressionCollectionName);
 
     }
     public async Task<Guid> CreateAsync(AdditionExpressionModel model)

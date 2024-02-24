@@ -9,10 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.RegisterMongo(builder.Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>());
-builder.Services.RegisterRabbit(
-    builder.Configuration.GetSection(nameof(RabbitSettings)).Get<RabbitSettings>(),
-    Assembly.GetExecutingAssembly());
+var mongoSettings = builder.Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
+var rabbitSettings = builder.Configuration.GetSection(nameof(RabbitSettings)).Get<RabbitSettings>();
+
+builder.Services.RegisterMongo(mongoSettings);
+builder.Services.RegisterRabbit(rabbitSettings, Assembly.GetExecutingAssembly());
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped<IAdditionExpressionRepository, AdditionExpressionRepository>();

@@ -11,6 +11,7 @@ public class UserInputValidator : AbstractValidator<UserInput>
         RuleFor(x => x.Expression).NotEmpty().WithMessage("Expression should not be null or empty");
         RuleFor(x => x.Expression).MaximumLength(50).WithMessage("Expression exceeds limit of 50 characters");
         RuleFor(x => x.Expression).Must(BeValidExpression).WithMessage("Expression is not valid. Please verify whether the sequence of operators is correct and contains only numbers, divided by dot and basic mathematical operators");
+        RuleFor(x => x.OperationId).NotEmpty().WithMessage("OperationId should not be empty");
     }
 
     private bool BeValidExpression(string expression)
