@@ -1,7 +1,7 @@
 namespace Calculator.API.Events;
 
-public record ConvertExpression
+public record ConversionFailed
 {
-    public string Expression { get; init; }
+    public string ErrorMessage { get; init; }
     public Guid OperationId { get; init; }
 }

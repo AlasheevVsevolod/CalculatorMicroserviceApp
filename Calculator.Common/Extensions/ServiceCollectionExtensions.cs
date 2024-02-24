@@ -8,7 +8,10 @@ namespace Calculator.Common.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection RegisterRabbit(this IServiceCollection services, RabbitSettings? rabbitSettings, params Assembly[] assemblies)
+    public static IServiceCollection RegisterRabbit(
+        this IServiceCollection services,
+        RabbitSettings? rabbitSettings,
+        params Assembly[] assemblies)
     {
         ArgumentNullException.ThrowIfNull(rabbitSettings);
 

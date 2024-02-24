@@ -1,3 +1,3 @@
 namespace Calculator.API.Models;
 
-public record UserInput(string Expression);
+public record UserInput(string Expression, Guid OperationId);
