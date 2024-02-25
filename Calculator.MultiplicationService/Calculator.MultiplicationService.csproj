@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <RootNamespace>MultiplicationService</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,10 +14,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Calculator.Common\Calculator.Common.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Consumers\AdditionCommandConsumer.cs" />
     </ItemGroup>
 
 </Project>

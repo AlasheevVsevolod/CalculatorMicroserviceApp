@@ -15,8 +15,4 @@
       <ProjectReference Include="..\Calculator.Common\Calculator.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Consumers\AdditionCommandConsumer.cs" />
-    </ItemGroup>
-
 </Project>

@@ -56,6 +56,7 @@ static class CalculateExpressionStateMachineExtensions
     {
         return binder.Then(context =>
         {
+            context.Saga.OperationId = context.Message.OperationId.ToString();
             context.Saga.Expression = context.Message.Expression;
             context.Saga.StartedOn = DateTime.UtcNow;
         });

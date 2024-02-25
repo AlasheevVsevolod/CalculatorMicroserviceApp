@@ -1,13 +1,13 @@
-using Calculator.AdditionService.Models;
 using Calculator.Common.Messaging;
 using MassTransit;
 using MediatR;
+using SubtractionService.Models;
 
-namespace Calculator.AdditionService.Activities;
+namespace SubtractionService.Activities;
 
-public class AdditionActivity(ISender mediator) : IActivity<AdditionActivityArguments, AdditionActivityLog>
+public class SubtractionActivity(ISender mediator) : IActivity<SubtractionActivityArguments, SubtractionActivityLog>
 {
-    public async Task<ExecutionResult> Execute(ExecuteContext<AdditionActivityArguments> context)
+    public async Task<ExecutionResult> Execute(ExecuteContext<SubtractionActivityArguments> context)
     {
         var message = context.Arguments;
         var operand1 = message.Operand1;
@@ -18,10 +18,10 @@ public class AdditionActivity(ISender mediator) : IActivity<AdditionActivityArgu
             throw new Exception(string.Join(",\n", result.Errors));
         }
 
-        return context.CompletedWithVariables(new AdditionActivityLog(result.CreatedId), new { Result = result.Value });
+        return context.CompletedWithVariables(new SubtractionActivityLog(result.CreatedId), new { Result = result.Value });
     }
 
-    public async Task<CompensationResult> Compensate(CompensateContext<AdditionActivityLog> context)
+    public async Task<CompensationResult> Compensate(CompensateContext<SubtractionActivityLog> context)
     {
         var result = await mediator.Send(new RemoveOperationCommand(context.Log.CreatedId));
         if (result.IsFailed)

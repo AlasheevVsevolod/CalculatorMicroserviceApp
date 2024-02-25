@@ -1,7 +1,7 @@
 using System.Reflection;
-using Calculator.AdditionService.Repositories;
 using Calculator.Common.Configurations;
 using Calculator.Common.Extensions;
+using Calculator.DivisionService.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ builder.Services.RegisterMongo(mongoSettings);
 builder.Services.RegisterRabbit(rabbitSettings, Assembly.GetExecutingAssembly());
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddScoped<IAdditionOperationRepository, AdditionOperationRepository>();
+builder.Services.AddScoped<IDivisionOperationRepository, DivisionOperationRepository>();
 
 var app = builder.Build();
 

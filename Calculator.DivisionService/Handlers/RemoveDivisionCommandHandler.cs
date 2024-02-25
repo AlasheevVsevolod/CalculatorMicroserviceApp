@@ -1,17 +1,17 @@
-using Calculator.AdditionService.Repositories;
 using Calculator.Common.Abstractions;
 using Calculator.Common.Messaging;
+using Calculator.DivisionService.Repositories;
 
-namespace Calculator.AdditionService.Handlers;
+namespace Calculator.DivisionService.Handlers;
 
-public class RemoveAdditionCommandHandler(IAdditionOperationRepository additionOperationRepository)
+public class RemoveDivisionCommandHandler(IDivisionOperationRepository operationRepository)
     : ICommandHandler<RemoveOperationCommand>
 {
     public async Task<Result> Handle(RemoveOperationCommand command, CancellationToken cancellationToken)
     {
         try
         {
-            await additionOperationRepository.DeleteAsync(command.Id);
+            await operationRepository.DeleteAsync(command.Id);
             return new Result();
         }
         catch (Exception e)

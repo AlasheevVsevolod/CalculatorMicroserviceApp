@@ -1,5 +1,4 @@
 using System.Reflection;
-using Calculator.API.Repositories;
 using Calculator.API.StateMachines;
 using Calculator.API.Validators;
 using Calculator.Common.Configurations;
@@ -17,8 +16,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<UserInputValidator>();
 
 var mongoSettings = builder.Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
 var rabbitSettings = builder.Configuration.GetSection(nameof(RabbitSettings)).Get<RabbitSettings>();
-
-// builder.Services.RegisterMongo(mongoSettings);
 
 builder.Services.AddMassTransit(x =>
 {
@@ -42,8 +39,6 @@ builder.Services.AddMassTransit(x =>
             r.DatabaseName = mongoSettings.SagaDatabaseName;
         });
 });
-
-builder.Services.AddScoped<IExpressionRepository, ExpressionRepository>();
 
 var app = builder.Build();
 

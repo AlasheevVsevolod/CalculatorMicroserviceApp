@@ -20,7 +20,6 @@ public class ConvertExpressionConsumer : IConsumer<ConvertExpression>
             var objectsInPolishNotation = ConvertToPolishNotation(parsedParts);
 
             var conversionFinishedMessage = new ConversionCompleted{ObjectsInPolishNotation = objectsInPolishNotation, OperationId = context.Message.OperationId};
-            Console.WriteLine("2 Publish ConversionCompleted");
             await context.Publish(conversionFinishedMessage);
         }
         catch (Exception e)
