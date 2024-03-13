@@ -3,7 +3,7 @@ namespace Calculator.API.Enums;
 public enum Operations
 {
     Add = '+',
-    Subtract = '-',
+    Divide = '/',
     Multiply = '*',
-    Divide = '/'
+    Subtract = '-'
 }

@@ -34,51 +34,49 @@ public class CalculateExpressionConsumer(IEndpointNameFormatter endpointNameForm
     private RoutingSlip CreateRoutingSlip(ConsumeContext<CalculateExpression> context)
     {
         var builder = new RoutingSlipBuilder(Guid.NewGuid());
-        var items = ParseObjects(context.Message.ObjectsInPolishNotation);
-        var initialValueAdded = false;
+        builder.AddVariable("Results", new Stack<double>());
 
-        var resultStack = new Stack<double>();
+        var items = ParseObjects(context.Message.ObjectsInPolishNotation);
+        var operandsStack = new Stack<double?>();
         foreach (var operand in items)
         {
             if (operand is double)
             {
-                resultStack.Push((double)operand);
+                operandsStack.Push((double)operand);
                 continue;
             }
 
-            if (!initialValueAdded)
-            {
-                resultStack.TryPop(out var op2);
-                builder.AddVariable("Result", op2);
-                initialValueAdded = true;
-            }
-
-            resultStack.TryPop(out var op1);
+            operandsStack.TryPop(out var op2);
+            operandsStack.TryPop(out var op1);
             switch ((Operations)operand)
             {
                 case Operations.Add:
                     builder.AddActivity(
                         "AdditionActivity",
                         new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<AdditionActivity, AdditionActivityArguments>()}"),
-                        new { Operand1 = op1 });
-                    break;
-                case Operations.Subtract:
-                    builder.AddActivity(
-                        "SubtractionActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<SubtractionActivity, SubtractionActivityArguments>()}"),
-                        new { Operand1 = op1 });
-                    break;
-                case Operations.Multiply:
-                    builder.AddActivity(
-                        "MultiplicationActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<MultiplicationActivity, MultiplicationActivityArguments>()}"),
-                        new { Operand1 = op1 });
+                        new { Operand1 = op1, Operand2 = op2 });
+                    operandsStack.Push(null);
                     break;
                 case Operations.Divide:
                     builder.AddActivity(
                         "DivisionActivity",
                         new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<DivisionActivity, DivisionActivityArguments>()}"),
-                        new { Operand1 = op1 });
+                        new { Operand1 = op1, Operand2 = op2 });
+                    operandsStack.Push(null);
+                    break;
+                case Operations.Multiply:
+                    builder.AddActivity(
+                        "MultiplicationActivity",
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<MultiplicationActivity, MultiplicationActivityArguments>()}"),
+                        new { Operand1 = op1, Operand2 = op2 });
+                    operandsStack.Push(null);
+                    break;
+                case Operations.Subtract:
+                    builder.AddActivity(
+                        "SubtractionActivity",
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<SubtractionActivity, SubtractionActivityArguments>()}"),
+                        new { Operand1 = op1, Operand2 = op2 });
+                    operandsStack.Push(null);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
