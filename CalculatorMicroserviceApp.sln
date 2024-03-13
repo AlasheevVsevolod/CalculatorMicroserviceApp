@@ -4,11 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.API", "Calculato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.AdditionService", "Calculator.AdditionService\Calculator.AdditionService.csproj", "{582700DC-42CA-4E2B-B4DC-2F98E04FD7F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubtractionService", "SubtractionService\SubtractionService.csproj", "{0514FF19-E384-484F-8747-FBA576410E32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.SubtractionService", "Calculator.SubtractionService\Calculator.SubtractionService.csproj", "{0514FF19-E384-484F-8747-FBA576410E32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiplicationService", "MultiplicationService\MultiplicationService.csproj", "{72E4D6F4-C711-4A19-80FF-49BC45A8EBE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.MultiplicationService", "Calculator.MultiplicationService\Calculator.MultiplicationService.csproj", "{72E4D6F4-C711-4A19-80FF-49BC45A8EBE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivisionService", "DivisionService\DivisionService.csproj", "{9583444F-10F7-4278-9BDE-B493A7F6A62D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.DivisionService", "Calculator.DivisionService\Calculator.DivisionService.csproj", "{9583444F-10F7-4278-9BDE-B493A7F6A62D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Common", "Calculator.Common\Calculator.Common.csproj", "{23DE5471-9C46-43BE-872E-5C9E25F08521}"
 EndProject

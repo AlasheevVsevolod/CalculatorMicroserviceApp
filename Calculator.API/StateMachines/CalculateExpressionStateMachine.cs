@@ -56,6 +56,7 @@ static class CalculateExpressionStateMachineExtensions
     {
         return binder.Then(context =>
         {
+            context.Saga.OperationId = context.Message.OperationId.ToString();
             context.Saga.Expression = context.Message.Expression;
             context.Saga.StartedOn = DateTime.UtcNow;
         });
@@ -84,7 +85,8 @@ static class CalculateExpressionStateMachineExtensions
     {
         return binder.Then(context =>
         {
-            context.Saga.Result = context.GetVariable<double>("Result").Value;
+            var calculationResult = Convert.ToDouble(context.GetVariable<List<object>>("Results")!.First());
+            context.Saga.Result = Math.Round(calculationResult, 3);
             context.Saga.FinishedOn = DateTime.UtcNow;
             context.Saga.Duration = context.Saga.FinishedOn - context.Saga.StartedOn;
         });

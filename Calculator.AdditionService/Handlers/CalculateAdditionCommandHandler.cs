@@ -5,21 +5,21 @@ using Calculator.Common.Messaging;
 
 namespace Calculator.AdditionService.Handlers;
 
-public class CalculateAdditionCommandHandler(IAdditionExpressionRepository additionExpressionRepository)
-    : ICommandHandler<CalculateAdditionCommand>
+public class CalculateAdditionCommandHandler(IAdditionOperationRepository additionOperationRepository)
+    : ICommandHandler<CalculateOperationCommand>
 {
-    public async Task<Result> Handle(CalculateAdditionCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CalculateOperationCommand command, CancellationToken cancellationToken)
     {
         try
         {
             var operationResult = command.Operand1 + command.Operand2;
-            var newExpression = new AdditionExpressionModel
+            var newExpression = new AdditionDocumentModel
             {
                 Expression = command.Operand1 + " + " + command.Operand2,
                 Result = operationResult
             };
 
-            var createdId = await additionExpressionRepository.CreateAsync(newExpression);
+            var createdId = await additionOperationRepository.CreateAsync(newExpression);
             return new Result { Value = operationResult, CreatedId = createdId};
         }
         catch (Exception e)

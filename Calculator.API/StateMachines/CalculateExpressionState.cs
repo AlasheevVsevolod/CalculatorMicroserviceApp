@@ -5,6 +5,7 @@ namespace Calculator.API.StateMachines;
 public class CalculateExpressionState : SagaStateMachineInstance, ISagaVersion
 {
     public Guid CorrelationId { get; set; }
+    public string OperationId { get; set; }
     public string Expression { get; set; } = string.Empty;
     public double Result { get; set; }
     public string CurrentState { get; set; } = "Initial";
