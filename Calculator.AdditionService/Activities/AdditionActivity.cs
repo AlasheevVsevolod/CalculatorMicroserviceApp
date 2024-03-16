@@ -1,30 +1,27 @@
-using Calculator.AdditionService.Models;
+using Calculator.Common.Extensions;
 using Calculator.Common.Messaging;
+using Calculator.Common.Models;
 using MassTransit;
 using MediatR;
 
 namespace Calculator.AdditionService.Activities;
 
-public class AdditionActivity(ISender mediator) : IActivity<AdditionActivityArguments, AdditionActivityLog>
+public class AdditionActivity(ISender mediator) : IActivity<BinaryActivityArguments, ActivityLog>
 {
-    public async Task<ExecutionResult> Execute(ExecuteContext<AdditionActivityArguments> context)
+    public async Task<ExecutionResult> Execute(ExecuteContext<BinaryActivityArguments> context)
     {
-        var resultsStack = new Stack<double>(((List<object>)context.Message.Variables["Results"]).Select(Convert.ToDouble).ToList());
-        var message = context.Arguments;
-        var operand1 = message.Operand1 ?? resultsStack.Pop();
-        var operand2 = message.Operand2 ?? resultsStack.Pop();
+        var results = context.GetResultsVariable();
+        var (operand1, operand2) = context.GetBinaryOperands(results);
         var result = await mediator.Send(new CalculateOperationCommand(operand1, operand2));
         if (result.IsFailed)
         {
             throw new Exception(string.Join(",\n", result.Errors));
         }
 
-        resultsStack.Push(result.Value);
-
-        return context.CompletedWithVariables(new AdditionActivityLog(result.CreatedId), new { Results = resultsStack });
+        return context.CompletedWithResultsVariable(result, results);
     }
 
-    public async Task<CompensationResult> Compensate(CompensateContext<AdditionActivityLog> context)
+    public async Task<CompensationResult> Compensate(CompensateContext<ActivityLog> context)
     {
         var result = await mediator.Send(new RemoveOperationCommand(context.Log.CreatedId));
         if (result.IsFailed)
