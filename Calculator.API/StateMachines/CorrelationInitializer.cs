@@ -16,5 +16,6 @@ public class CorrelationInitializer
         MessageCorrelation.UseCorrelationId<ConversionFailed>(x => x.OperationId);
         MessageCorrelation.UseCorrelationId<ConvertExpression>(x => x.OperationId);
         MessageCorrelation.UseCorrelationId<ExpressionReceived>(x => x.OperationId);
+        MessageCorrelation.UseCorrelationId<CalculationStatusRequested>(x => x.OperationId);
     }
 }
