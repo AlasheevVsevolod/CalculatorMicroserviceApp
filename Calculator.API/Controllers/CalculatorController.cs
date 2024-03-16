@@ -8,7 +8,7 @@ namespace Calculator.API.Controllers;
 
 [ApiController]
 [Route("api/calculator")]
-public class CalculatorController(IBus bus) : ControllerBase
+public class CalculatorController(IBus bus, IRequestClient<CalculationStatusRequested> requestClient) : ControllerBase
 {
     [HttpPost("calculate")]
     public async Task<IActionResult> CalculateExpression(UserInput userInput, IValidator<UserInput> validator)
@@ -27,5 +27,25 @@ public class CalculatorController(IBus bus) : ControllerBase
         await bus.Publish(message);
 
         return Ok(userInput.OperationId);
+    }
+
+    [HttpGet("operations/{operationId:guid}")]
+    public async Task<IActionResult> GetCalculationStatus(Guid operationId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var message = new CalculationStatusRequested{ OperationId = operationId };
+            var result = await requestClient.GetResponse<CalculationStatus>(message, cancellationToken);
+
+            return Ok(result.Message);
+        }
+        catch (RequestFaultException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 }

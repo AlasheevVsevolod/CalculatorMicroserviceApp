@@ -1,4 +1,5 @@
 using Calculator.API.Events;
+using Calculator.API.Models;
 using MassTransit;
 
 namespace Calculator.API.StateMachines;
@@ -34,6 +35,21 @@ public class CalculateExpressionStateMachine : MassTransitStateMachine<Calculate
                 .CalculationFailed()
                 .TransitionTo(Suspended)
             );
+
+        DuringAny(
+            When(CalculationStatusRequestedEvent)
+                .Respond(x => new CalculationStatus
+                {
+                    OperationId = x.Saga.OperationId,
+                    Expression = x.Saga.Expression,
+                    Result = x.Saga.Result,
+                    CurrentState = x.Saga.CurrentState,
+                    Reason = x.Saga.Reason,
+                    UpdatedOn = x.Saga.UpdatedOn,
+                    StartedOn = x.Saga.StartedOn,
+                    FinishedOn = x.Saga.FinishedOn,
+                    Duration = x.Saga.Duration
+                }));
     }
 
 
@@ -47,6 +63,7 @@ public class CalculateExpressionStateMachine : MassTransitStateMachine<Calculate
     public Event<ConversionFailed> ConversionFailedEvent { get; }
     public Event<CalculationCompleted> CalculationCompletedEvent { get; }
     public Event<CalculationFailed> CalculationFailedEvent { get; }
+    public Event<CalculationStatusRequested> CalculationStatusRequestedEvent { get; }
 }
 
 static class CalculateExpressionStateMachineExtensions

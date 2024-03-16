@@ -1,17 +1,14 @@
 using Calculator.AdditionService.Activities;
-using Calculator.AdditionService.Models;
 using Calculator.API.Enums;
 using Calculator.API.Events;
 using Calculator.API.Extensions;
+using Calculator.Common.Models;
 using Calculator.DivisionService.Activities;
-using Calculator.DivisionService.Models;
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using MassTransit.Events;
 using MultiplicationService.Activities;
-using MultiplicationService.Models;
 using SubtractionService.Activities;
-using SubtractionService.Models;
 
 namespace Calculator.API.Consumers;
 
@@ -53,28 +50,28 @@ public class CalculateExpressionConsumer(IEndpointNameFormatter endpointNameForm
                 case Operations.Add:
                     builder.AddActivity(
                         "AdditionActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<AdditionActivity, AdditionActivityArguments>()}"),
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<AdditionActivity, BinaryActivityArguments>()}"),
                         new { Operand1 = op1, Operand2 = op2 });
                     operandsStack.Push(null);
                     break;
                 case Operations.Divide:
                     builder.AddActivity(
                         "DivisionActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<DivisionActivity, DivisionActivityArguments>()}"),
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<DivisionActivity, BinaryActivityArguments>()}"),
                         new { Operand1 = op1, Operand2 = op2 });
                     operandsStack.Push(null);
                     break;
                 case Operations.Multiply:
                     builder.AddActivity(
                         "MultiplicationActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<MultiplicationActivity, MultiplicationActivityArguments>()}"),
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<MultiplicationActivity, BinaryActivityArguments>()}"),
                         new { Operand1 = op1, Operand2 = op2 });
                     operandsStack.Push(null);
                     break;
                 case Operations.Subtract:
                     builder.AddActivity(
                         "SubtractionActivity",
-                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<SubtractionActivity, SubtractionActivityArguments>()}"),
+                        new Uri($"exchange:{endpointNameFormatter.ExecuteActivity<SubtractionActivity, BinaryActivityArguments>()}"),
                         new { Operand1 = op1, Operand2 = op2 });
                     operandsStack.Push(null);
                     break;
